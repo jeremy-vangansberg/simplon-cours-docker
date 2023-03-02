@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-fw8fp5(bmdwy@46ntq&1%q$h%^y#ugii5^!(oa_+a3w2f=064d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['20.40.153.253', '0.0.0.0']
 
 
 # Application definition
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'main',
 ]
 
 MIDDLEWARE = [
@@ -79,6 +81,33 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+DB_USERNAME = os.getenv('POSTGRES_USER')
+DB_PASSWORD = os.getenv('POSTGRES_PASSWORD')
+DB_DATABASE = os.getenv('POSTGRES_DB')
+DB_HOST = os.getenv('POSTGRES_HOST')
+DB_PORT = os.getenv('POSTGRES_PORT')
+POSTGRES_AVAIL = all(
+    [DB_USERNAME,
+    DB_PASSWORD,
+    DB_DATABASE,
+    DB_HOST,
+    DB_PORT]
+    )
+
+POSTGRES_RDY = str(os.getenv('POSTGRES_RDY')) == '1'
+
+if POSTGRES_AVAIL and POSTGRES_RDY:
+    DATABASES = {
+        'default': {
+        'ENGINE' : 'django.db.backends.postgresql',
+        'NAME' : DB_DATABASE,
+        'USER' : DB_USERNAME,
+        'PASSWORD' : DB_PASSWORD,
+        'HOST' : DB_HOST,
+        'PORT' : DB_PORT
+        }
+    }
 
 
 # Password validation
