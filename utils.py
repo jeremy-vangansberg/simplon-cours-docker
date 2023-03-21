@@ -1,4 +1,4 @@
-def env_to_json(env_file_path='/Users/jeremyvangansbeg/Documents/project/jeremy_vangansberg/web/.env'):
+def env_to_json(env_file_path='/Users/jeremyvangansbeg/Documents/cours/cours-docker/5.compose_volumes/start/.env'):
     """Transform .env to json format for Azure App Service environnements variables
 
     Args:
@@ -11,7 +11,6 @@ def env_to_json(env_file_path='/Users/jeremyvangansbeg/Documents/project/jeremy_
     import json
     env_file = open(env_file_path, 'r')
     Lines = env_file.readlines()
-    print(Lines)
     
     env_list = []
     for line in Lines :

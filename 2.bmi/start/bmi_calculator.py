@@ -9,5 +9,4 @@ def formula_bmi(weight=weight, height=height):
     rounded_bmi = round(bmi, 2)
     return rounded_bmi
 
-
 print(f"Votre BMI est de {formula_bmi()}.")
