@@ -1,16 +1,19 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
-WORKDIR /app
+WORKDIR /app 
 
 ENV PYTHONUNBUFFERED 1
 
-COPY requirements.txt /app/
+COPY requirements.txt /app
+
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
 COPY . /app
 
-EXPOSE 80
+EXPOSE 8000
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:80"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

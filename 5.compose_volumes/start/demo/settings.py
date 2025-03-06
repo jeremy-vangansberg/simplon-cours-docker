@@ -10,10 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-from pathlib import Path
-import os 
+from pathlib import Path 
 
-print(os.getenv('POSTGRES_DB'))
+import os
+
+print(os.getenv('TEST'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +29,7 @@ SECRET_KEY = 'django-insecure-2=p)b=1m)*@6&r5#bihf(w464ldc#1^@z)kpl731zrlxq1pa3(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'demo-demo.yd6huj.easypanel.host']
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -80,38 +81,43 @@ WSGI_APPLICATION = 'demo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'data' / 'db.sqlite3',
     }
 }
 
-DB_USERNAME = os.getenv('POSTGRES_USER')
-DB_PASSWORD = os.getenv('POSTGRES_PASSWORD')
-DB_DATABASE = os.getenv('POSTGRES_DB')
-DB_HOST = os.getenv('POSTGRES_HOST')
-DB_PORT = os.getenv('POSTGRES_PORT')
-POSTGRES_AVAIL = all(
-    [DB_USERNAME,
-    DB_PASSWORD,
-    DB_DATABASE,
-    DB_HOST,
-    DB_PORT]
+#récupère les variables du .env
+POSTGRES_USER = os.getenv('POSTGRES_USER')
+POSTGRES_HOST = os.getenv('POSTGRES_HOST')
+POSTGRES_DB = os.getenv('POSTGRES_DB')
+POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
+POSTGRES_PORT = os.getenv('POSTGRES_PORT')
+
+#Je vais vérifier si elles sont toutes définies
+
+POSTGRES_AVAILABLE = all(
+    [POSTGRES_USER,
+    POSTGRES_HOST,
+    POSTGRES_DB,
+    POSTGRES_PASSWORD,
+    POSTGRES_PORT
+    ]
 )
 
 POSTGRES_RDY = int(os.getenv('POSTGRES_RDY'))
 
-if POSTGRES_AVAIL and POSTGRES_RDY:
+if POSTGRES_AVAILABLE and POSTGRES_RDY :
     DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': DB_DATABASE,
-        'USER': DB_USERNAME,
-        'PASSWORD': DB_PASSWORD,
-        'HOST': DB_HOST,
-        'PORT': DB_PORT,
+        'NAME': POSTGRES_DB,
+        'USER' : POSTGRES_USER,
+        "PASSWORD" : POSTGRES_PASSWORD,
+        "HOST" : POSTGRES_HOST,
+        "PORT" : POSTGRES_PORT
     }
-}  
+}
 
-
+print(DATABASES)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
